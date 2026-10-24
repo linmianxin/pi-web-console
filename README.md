@@ -10,6 +10,8 @@
 
 > A WorkBuddy-style web console for driving the [pi](https://github.com/earendil-works/pi) coding agent over its official RPC mode. Zero third-party dependencies, streaming chat, session management, model switching, and live tool-call visualization.
 
+📖 English documentation: [README.en.md](./README.en.md)
+
 ---
 
 ## 这是什么
