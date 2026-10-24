@@ -1,0 +1,29 @@
+{
+  "name": "pi-web-console",
+  "version": "1.0.0",
+  "description": "一个 WorkBuddy 风格的网页控制台，用于方便地调用 pi 编码智能体（基于 pi 的 RPC 模式，零第三方依赖）",
+  "type": "module",
+  "main": "server.mjs",
+  "bin": {
+    "pi-console": "server.mjs"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "keywords": [
+    "pi",
+    "pi-coding-agent",
+    "coding-agent",
+    "ai",
+    "console",
+    "chat",
+    "workbuddy",
+    "rpc"
+  ],
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "license": "MIT",
+  "dependencies": {}
+}
