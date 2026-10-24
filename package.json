@@ -28,11 +28,11 @@
   "author": "nim",
   "repository": {
     "type": "git",
-    "url": "https://github.com/nim/pi-web-console.git"
+    "url": "https://github.com/linmianxin/pi-web-console.git"
   },
   "bugs": {
-    "url": "https://github.com/nim/pi-web-console/issues"
+    "url": "https://github.com/linmianxin/pi-web-console/issues"
   },
-  "homepage": "https://github.com/nim/pi-web-console#readme",
+  "homepage": "https://github.com/linmianxin/pi-web-console#readme",
   "dependencies": {}
 }

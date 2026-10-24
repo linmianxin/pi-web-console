@@ -54,7 +54,7 @@ cd pi-web-console
 node server.mjs
 ```
 
-然后浏览器打开 http://localhost:8000
+然后浏览器打开 <http://localhost:8000>
 
 Windows 也可双击 `start.bat`；macOS/Linux 可运行 `./start.sh`。
 
@@ -71,17 +71,17 @@ npm start          # 等价于 node server.mjs
 
 `config.json`（首次运行自动生成，模板见 `config.example.json`）：
 
-| 字段 | 说明 | 默认 |
-|---|---|---|
-| `port` | 网页端口 | `8000` |
-| `workspace` | pi 的工作目录（留空则用用户主目录下的 `pi-workspace`） | `<home>/pi-workspace` |
-| `sessionDir` | 会话文件目录 | `<项目>/sessions` |
-| `approve` | 信任项目本地文件（AGENTS.md 等，等同 `pi --approve`） | `true` |
-| `piInstallRoot` | pi installer 安装根目录（一般自动探测） | `<home>/.pi/agent/install` |
-| `piCliPath` | **可选**：显式指定 pi 的 `cli.js` 路径（优先级最高） | 空 |
-| `nodePath` | **可选**：显式指定 node 可执行文件路径 | 空 |
+| 字段              | 说明                                      | 默认                         |
+| --------------- | --------------------------------------- | -------------------------- |
+| `port`          | 网页端口                                    | `8000`                     |
+| `workspace`     | pi 的工作目录（留空则用用户主目录下的 `pi-workspace`）    | `<home>/pi-workspace`      |
+| `sessionDir`    | 会话文件目录                                  | `<项目>/sessions`            |
+| `approve`       | 信任项目本地文件（AGENTS.md 等，等同 `pi --approve`） | `true`                     |
+| `piInstallRoot` | pi installer 安装根目录（一般自动探测）              | `<home>/.pi/agent/install` |
+| `piCliPath`     | **可选**：显式指定 pi 的 `cli.js` 路径（优先级最高）     | 空                          |
+| `nodePath`      | **可选**：显式指定 node 可执行文件路径                | 空                          |
 
-> 工作目录也可以在网页右上角「设置」里直接改，保存后自动重启 pi。
+> 工作目录也可以在网页右上角「设置」里直接改，保存后自动重启 pi。  
 > 若无法自动找到 pi，请在 `config.json` 里设置 `piCliPath`。
 
 ## 目录结构
@@ -111,6 +111,7 @@ pi --mode rpc（编码智能体子进程）
 ```
 
 后端按 pi 官方 [RPC 模式](https://github.com/earendil-works/pi) 协议：
+
 - 把浏览器的 `prompt / abort / new_session / switch_session / set_model / export_html …` 转发给 pi；
 - 把 pi 的流式事件（`text_delta` / `thinking_delta` / `tool_execution_*` / `agent_settled`）通过 **SSE** 推给浏览器实时渲染。
 
@@ -118,13 +119,13 @@ pi --mode rpc（编码智能体子进程）
 
 ## 常见问题
 
-**Q：页面显示「未连接」？**
+**Q：页面显示「未连接」？**  
 先确认 pi 能单独运行：`pi --list-models`。若正常，检查 `config.json` 的 `piInstallRoot` / `piCliPath`，或在「设置」里查看报错。
 
-**Q：需要 Docker 或安装 npm 包吗？**
+**Q：需要 Docker 或安装 npm 包吗？**  
 不需要。零第三方依赖，只依赖本机 Node 与 pi。
 
-**Q：怎么改默认模型？**
+**Q：怎么改默认模型？**  
 网页顶部下拉切换，或 `pi --list-models` 查看可用模型后，在 `config.json` 里启动参数（后端目前不固化 `--model`，默认沿用 pi 的默认模型）。
 
 ## 贡献
