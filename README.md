@@ -24,6 +24,10 @@
 
 它通过 pi 官方的 **RPC 模式**（`pi --mode rpc`）驱动 pi：后端用一个 Node 子进程跑 pi，把命令和流式事件在浏览器与 pi 之间双向转发。
 
+## 界面预览
+
+![Pi 控制台界面](./assets/screenshot.png)
+
 ## 特性
 
 - ⚡ **流式聊天**：实时渲染文本，支持 Markdown + 代码高亮

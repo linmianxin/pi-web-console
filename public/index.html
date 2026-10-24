@@ -14,20 +14,20 @@
       <div class="sidebar-head">
         <div class="brand">
           <span class="brand-logo">π</span>
-          <span class="brand-name">Pi 控制台</span>
+          <span class="brand-name" data-i18n="brand.name">Pi 控制台</span>
         </div>
-        <button id="btn-new-session" class="btn btn-primary btn-block" title="新建会话">
-          <span class="icon">＋</span> 新建会话
+        <button id="btn-new-session" class="btn btn-primary btn-block" data-i18n-title="newSession">
+          <span class="icon">＋</span><span data-i18n="newSession">新建会话</span>
         </button>
       </div>
       <div class="sidebar-scroll" id="session-list">
-        <div class="empty-hint">暂无会话</div>
+        <div class="empty-hint" data-i18n="emptyHint">暂无会话</div>
       </div>
       <div class="sidebar-foot">
         <div class="foot-row" id="foot-workspace" title="工作目录"></div>
         <div class="foot-row">
           <span class="dot" id="conn-dot"></span>
-          <span id="conn-text">连接中…</span>
+          <span id="conn-text" data-i18n="conn.connecting">连接中…</span>
           <span class="foot-right" id="foot-version"></span>
         </div>
       </div>
@@ -38,41 +38,42 @@
       <header id="topbar">
         <div class="topbar-left">
           <label class="field">
-            <span class="field-label">模型</span>
-            <select id="model-select" title="选择模型"></select>
+            <span class="field-label" data-i18n="model.label">模型</span>
+            <select id="model-select" data-i18n-title="model.label"></select>
           </label>
           <label class="field">
-            <span class="field-label">思考</span>
-            <select id="thinking-select" title="思考等级"></select>
+            <span class="field-label" data-i18n="thinking.label">思考</span>
+            <select id="thinking-select" data-i18n-title="thinking.label"></select>
           </label>
         </div>
         <div class="topbar-right">
-          <span class="stat" id="stat-usage" title="上下文用量">—</span>
-          <button class="btn btn-ghost" id="btn-theme" title="切换深浅色（Ctrl+Shift+D）">🌓</button>
-          <button class="btn btn-ghost" id="btn-export" title="导出当前会话为 HTML">导出</button>
-          <button class="btn btn-ghost" id="btn-settings" title="设置">设置</button>
+          <span class="stat" id="stat-usage" data-i18n-title="stat.usage">—</span>
+          <button class="btn btn-ghost" id="btn-lang" data-i18n-title="lang.title" title="切换语言 / Switch language">EN</button>
+          <button class="btn btn-ghost" id="btn-theme" data-i18n-title="theme.title" title="切换深浅色（Ctrl+Shift+D）">🌓</button>
+          <button class="btn btn-ghost" id="btn-export" data-i18n="export.btn" data-i18n-title="export.title" title="导出当前会话为 HTML">导出</button>
+          <button class="btn btn-ghost" id="btn-settings" data-i18n="settings.btn" data-i18n-title="settings.btn" title="设置">设置</button>
         </div>
       </header>
 
       <div id="messages">
         <div id="empty-state" class="empty-state">
           <div class="empty-logo">π</div>
-          <h1>有什么可以帮你？</h1>
-          <p>我是 pi 编码智能体。可以直接给我任务，例如：</p>
+          <h1 data-i18n="empty.title">有什么可以帮你？</h1>
+          <p data-i18n="empty.subtitle">我是 pi 编码智能体。可以直接给我任务，例如：</p>
           <div class="suggestions">
-            <button class="sugg" data-q="看看当前目录里有什么文件">看看当前目录里有什么文件</button>
-            <button class="sugg" data-q="帮我写一个 Python 脚本，打印当前时间">写一个打印当前时间的 Python 脚本</button>
-            <button class="sugg" data-q="解释一下这个项目是做什么的">解释一下这个项目是做什么的</button>
-            <button class="sugg" data-q="检查当前目录的 git 状态">检查当前目录的 git 状态</button>
+            <button class="sugg" data-q="看看当前目录里有什么文件" data-i18n="sugg.1">看看当前目录里有什么文件</button>
+            <button class="sugg" data-q="帮我写一个 Python 脚本，打印当前时间" data-i18n="sugg.2">帮我写一个 Python 脚本，打印当前时间</button>
+            <button class="sugg" data-q="解释一下这个项目是做什么的" data-i18n="sugg.3">解释一下这个项目是做什么的</button>
+            <button class="sugg" data-q="检查当前目录的 git 状态" data-i18n="sugg.4">检查当前目录的 git 状态</button>
           </div>
         </div>
       </div>
 
       <footer id="inputbar">
         <div class="input-wrap">
-          <textarea id="input" rows="1" placeholder="给 pi 发消息…（Enter 发送，Shift+Enter 换行）"></textarea>
-          <button id="btn-send" class="btn btn-primary" title="发送">发送</button>
-          <button id="btn-stop" class="btn btn-danger hidden" title="停止">停止</button>
+          <textarea id="input" rows="1" data-i18n-placeholder="input.placeholder" placeholder="给 pi 发消息…（Enter 发送，Shift+Enter 换行）"></textarea>
+          <button id="btn-send" class="btn btn-primary" data-i18n="send">发送</button>
+          <button id="btn-stop" class="btn btn-danger hidden" data-i18n="stop">停止</button>
         </div>
         <div class="input-hint" id="input-hint"></div>
       </footer>
@@ -83,31 +84,32 @@
   <div id="modal-mask" class="modal-mask hidden">
     <div class="modal">
       <div class="modal-head">
-        <h2>设置</h2>
+        <h2 data-i18n="modal.title">设置</h2>
         <button class="btn btn-ghost" id="btn-modal-close">✕</button>
       </div>
       <div class="modal-body">
         <label class="field-col">
-          <span>工作目录（pi 在此目录下干活）</span>
+          <span data-i18n="modal.workspace">工作目录（pi 在此目录下干活）</span>
           <input type="text" id="set-workspace" placeholder="F:\pi-workspace" />
         </label>
         <label class="field-col">
-          <span>会话目录</span>
+          <span data-i18n="modal.sessiondir">会话目录</span>
           <input type="text" id="set-sessiondir" readonly />
         </label>
         <label class="field-check">
           <input type="checkbox" id="set-approve" />
-          <span>信任项目本地文件（AGENTS.md 等，等同 --approve）</span>
+          <span data-i18n="modal.approve">信任项目本地文件（AGENTS.md 等，等同 --approve）</span>
         </label>
-        <p class="modal-note" id="modal-note">修改工作目录后需重启 pi 才会生效。</p>
+        <p class="modal-note" id="modal-note"></p>
       </div>
       <div class="modal-foot">
-        <button class="btn btn-ghost" id="btn-modal-cancel">取消</button>
-        <button class="btn btn-primary" id="btn-restart">保存并重启 pi</button>
+        <button class="btn btn-ghost" id="btn-modal-cancel" data-i18n="modal.cancel">取消</button>
+        <button class="btn btn-primary" id="btn-restart" data-i18n="modal.restart">保存并重启 pi</button>
       </div>
     </div>
   </div>
 
+  <script src="/i18n.js"></script>
   <script src="/app.js"></script>
 </body>
 </html>

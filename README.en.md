@@ -24,6 +24,10 @@
 
 It drives pi through pi's official **RPC mode** (`pi --mode rpc`): the backend runs pi as a Node child process and relays commands and streaming events between the browser and pi.
 
+## Screenshot
+
+![Pi Web Console](./assets/screenshot.png)
+
 ## Features
 
 - ⚡ **Streaming chat** with Markdown rendering and code highlighting

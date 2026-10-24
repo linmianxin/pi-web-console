@@ -299,7 +299,7 @@ function readSessionMeta(file) {
         if (title) break;
       }
     }
-    if (!title) title = header && header.cwd ? "(空会话) " + path.basename(header.cwd) : "(空会话)";
+    if (!title) title = header && header.cwd ? path.basename(header.cwd) : "(empty)";
     title = title.replace(/\s+/g, " ").trim().slice(0, 80);
 
     return {

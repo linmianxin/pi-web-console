@@ -20,10 +20,10 @@ function fmtTime(ts) {
   const d = new Date(ts);
   const now = new Date();
   const diff = now - d;
-  if (diff < 60e3) return "刚刚";
-  if (diff < 3600e3) return Math.floor(diff / 60e3) + " 分钟前";
-  if (diff < 86400e3) return Math.floor(diff / 3600e3) + " 小时前";
-  if (diff < 7 * 86400e3) return Math.floor(diff / 86400e3) + " 天前";
+  if (diff < 60e3) return t("time.just");
+  if (diff < 3600e3) return t("time.min", { n: Math.floor(diff / 60e3) });
+  if (diff < 86400e3) return t("time.hour", { n: Math.floor(diff / 3600e3) });
+  if (diff < 7 * 86400e3) return t("time.day", { n: Math.floor(diff / 86400e3) });
   return `${d.getMonth() + 1}/${d.getDate()}`;
 }
 
@@ -215,7 +215,7 @@ function renderBlocks(blocks) {
       if (b.text) html += '<div class="md">' + mdToHtml(b.text) + "</div>";
     } else if (b.type === "thinking") {
       if (b.thinking) {
-        html += '<details class="thinking"><summary>思考过程</summary><div class="thinking-body">' +
+        html += '<details class="thinking"><summary>' + t("thinking.title") + '</summary><div class="thinking-body">' +
           escapeHtml(b.thinking) + "</div></details>";
       }
     } else if (b.type === "toolCall") {
@@ -228,9 +228,9 @@ function renderBlocks(blocks) {
 
 function renderToolCard(item) {
   let badge;
-  if (item.status === "running") badge = '<span class="t-badge running">执行中</span>';
-  else if (item.status === "error") badge = '<span class="t-badge error">出错</span>';
-  else badge = '<span class="t-badge done">完成</span>';
+  if (item.status === "running") badge = '<span class="t-badge running">' + t("tool.running") + "</span>";
+  else if (item.status === "error") badge = '<span class="t-badge error">' + t("tool.error") + "</span>";
+  else badge = '<span class="t-badge done">' + t("tool.done") + "</span>";
   const name = escapeHtml(item.toolName || "tool");
   const dur = item.durationMs != null ? " · " + item.durationMs + "ms" : "";
   let argsHtml = "";
@@ -270,7 +270,7 @@ function renderItem(item) {
       '</div><div class="tool-body"><div class="t-output">' + escapeHtml(item.output || "") + "</div></div></div></div>";
   }
   if (item.kind === "note") {
-    return '<div class="note"><span class="pill">' + escapeHtml(item.text) + "</span></div>";
+    return '<div class="note"><span class="pill">' + escapeHtml(t(item.key, item.vars)) + "</span></div>";
   }
   return "";
 }
@@ -309,8 +309,8 @@ function scheduleRender() {
   requestAnimationFrame(render);
 }
 
-function addNote(text) {
-  view.push({ kind: "note", text });
+function addNote(key, vars) {
+  view.push({ kind: "note", key, vars });
   scheduleRender();
 }
 
@@ -331,8 +331,8 @@ function handlePiEvent(rec) {
     case "tool_execution_start": onToolStart(rec); break;
     case "tool_execution_update": onToolUpdate(rec); break;
     case "tool_execution_end": onToolEnd(rec); break;
-    case "compaction_start": addNote("正在压缩上下文…"); break;
-    case "compaction_end": addNote("上下文压缩完成"); break;
+    case "compaction_start": addNote("compacting"); break;
+    case "compaction_end": addNote("compacted"); break;
     case "session_info_changed": state.sessionName = rec.name ?? null; break;
     case "thinking_level_changed": state.thinkingLevel = rec.level; syncSelectors(); break;
     case "ui:status": applyStatus(rec); break;
@@ -386,7 +386,7 @@ function onMessageEnd(message) {
   } else if (message.role === "bashExecution") {
     view.push({ kind: "shell", command: message.command, output: message.output, exitCode: message.exitCode });
   } else if (message.role === "compactionSummary" || message.role === "branchSummary") {
-    addNote(message.role === "compactionSummary" ? "上下文已压缩" : "分支摘要");
+    addNote(message.role === "compactionSummary" ? "note.compacted" : "note.branch");
   }
 }
 
@@ -442,7 +442,7 @@ function setStreaming(v) {
   state.streaming = v;
   $("#btn-send").classList.toggle("hidden", v);
   $("#btn-stop").classList.toggle("hidden", !v);
-  $("#input-hint").textContent = v ? "pi 正在工作中…可以输入消息排队，或点击「停止」打断" : "";
+  $("#input-hint").textContent = v ? t("streaming.hint") : "";
 }
 
 function applyStatus(rec) {
@@ -474,10 +474,10 @@ function updateConn() {
   const txt = $("#conn-text");
   if (state.connected) {
     dot.className = "dot on";
-    txt.textContent = state.streaming ? "工作中…" : "已连接";
+    txt.textContent = state.streaming ? t("conn.working") : t("conn.on");
   } else {
     dot.className = "dot off";
-    txt.textContent = "未连接";
+    txt.textContent = t("conn.off");
   }
 }
 
@@ -500,7 +500,7 @@ function syncSelectors() {
       escapeHtml(m.name || m.id) + "</option>",
     ).join("");
     if (!state.models.length) {
-      ms.innerHTML = state.model ? '<option>' + escapeHtml(state.model.name || state.model.id) + "</option>" : "<option>无模型</option>";
+      ms.innerHTML = state.model ? '<option>' + escapeHtml(state.model.name || state.model.id) + "</option>" : "<option>" + t("model.none") + "</option>";
     }
   }
   const ts = $("#thinking-select");
@@ -516,7 +516,7 @@ function renderSessions() {
   const list = $("#session-list");
   if (!list) return;
   if (!state.sessions.length) {
-    list.innerHTML = '<div class="empty-hint">暂无会话</div>';
+    list.innerHTML = '<div class="empty-hint">' + t("emptyHint") + "</div>";
     return;
   }
   list.innerHTML = "";
@@ -524,9 +524,9 @@ function renderSessions() {
     const active = s.path === state.currentSessionPath || s.path === state.sessionFile;
     const item = el("div", "session-item" + (active ? " active" : ""));
     item.innerHTML =
-      '<div class="s-title">' + escapeHtml(s.title || "(未命名)") + "</div>" +
+      '<div class="s-title">' + escapeHtml(s.title || t("session.untitled")) + "</div>" +
       '<div class="s-meta">' + fmtTime(s.mtimeMs || s.timestamp) + " · " + escapeHtml(shortPath(s.cwd || "")) + "</div>" +
-      '<button class="s-del" title="删除会话">🗑</button>';
+      '<button class="s-del" title="' + t("tool.delete") + '">🗑</button>';
     item.addEventListener("click", (e) => {
       if (e.target.classList.contains("s-del")) return;
       switchSession(s.path);
@@ -548,7 +548,7 @@ async function switchSession(sessionPath) {
 }
 
 async function deleteSession(s) {
-  if (!confirm("确定删除会话「" + (s.title || "未命名") + "」？此操作不可恢复。")) return;
+  if (!confirm(t("confirm.delete", { title: s.title || t("session.untitled") }))) return;
   await api("/api/delete-session", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -576,9 +576,9 @@ async function loadMessages() {
     } else if (m.role === "bashExecution") {
       view.push({ kind: "shell", command: m.command, output: m.output, exitCode: m.exitCode });
     } else if (m.role === "compactionSummary") {
-      view.push({ kind: "note", text: "📦 上下文已压缩" });
+      view.push({ kind: "note", key: "note.compacted" });
     } else if (m.role === "branchSummary") {
-      view.push({ kind: "note", text: "🌿 分支摘要" });
+      view.push({ kind: "note", key: "note.branch" });
     }
   }
   render();
@@ -632,17 +632,17 @@ async function sendMessage(text) {
   text = (text || "").trim();
   if (!text) return;
   if (!state.connected) {
-    addNote("pi 未连接，正在尝试重启…");
+    addNote("reconnect.attempting");
     await api("/api/restart", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
     await refreshState();
-    if (!state.connected) { addNote("仍无法连接 pi，请检查设置中的 pi 路径。"); return; }
+    if (!state.connected) { addNote("reconnect.fail"); return; }
   }
   $("#input").value = "";
   autoResize();
   const type = state.streaming ? "follow_up" : "prompt";
   const r = await command(type, { message: text });
   if (!r || !r.success) {
-    addNote("发送失败: " + (r && r.error ? r.error : "未知错误"));
+    addNote("send.fail", { error: (r && r.error) || "?" });
   }
 }
 
@@ -716,9 +716,9 @@ function bindEvents() {
   $("#btn-export").addEventListener("click", async () => {
     const r = await command("export_html").catch(() => null);
     if (r && r.success) {
-      addNote("已导出会话 HTML: " + r.data.path);
+      addNote("export.ok", { path: r.data.path });
     } else {
-      addNote("导出失败");
+      addNote("export.fail");
     }
   });
 
@@ -739,6 +739,9 @@ function bindEvents() {
   document.addEventListener("keydown", (e) => {
     if (e.ctrlKey && e.shiftKey && (e.key === "D" || e.key === "d")) { e.preventDefault(); toggleTheme(); }
   });
+
+  // 语言切换
+  $("#btn-lang").addEventListener("click", () => setLang(LANG === "zh" ? "en" : "zh"));
 
   // 滚动检测，决定是否自动跟随底部
   const container = $("#messages");
@@ -792,6 +795,14 @@ function initTheme() {
 async function main() {
   initTheme();
   bindEvents();
+  window.onLangChanged = () => {
+    renderSessions();
+    syncSelectors();
+    updateConn();
+    setStreaming(state.streaming);
+    render();
+  };
+  applyI18n();
   connectSSE();
   await refreshAll();
 }
